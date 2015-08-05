@@ -1,14 +1,10 @@
-var express = require('express'),
-		catRouter = express.Router(), //creates a router as a module, loads a middleware 
-		mongoose = require('mongoose'),
-		Cat = require('../model/cats.js'),
+var Cat = require('../model/cats.js'),
 		Dog = require('../model/dogs.js'),
 		bodyParser = require('body-parser');
 
-exports.catRouter = function(router) {
-	
+module.exports = function(router) {	
 	router.use(bodyParser.json());
-	router.user(bodyParser.urlencoded({extended:true}));
+	router.use(bodyParser.urlencoded({extended:true}));
 
 		router.route('/')
 		// view all cats
@@ -46,7 +42,7 @@ exports.catRouter = function(router) {
 						res.json(errorHandler(err)(500, 'retrieve the cat.'));
 					}
 					else {
-					res.json(data);
+					res.json(cat);
 					}
 				})		
 			})

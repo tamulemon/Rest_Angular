@@ -44,17 +44,12 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict'
-	__webpack_require__(1);
+	'use strict';
+	__webpack_require__(1); 
 
 	var catDogApp = angular.module('catDogApp', []);
 
-	var catController = catDogApp.controller('catController', [$scope, function($scope) {
-		$scope.name = catName;
-		$scope.cuteness = cuteness;
-		$scope.friends = 'no friend yet';
-		$scope.enimies = 'no enemy yet';
-	}]);
+	__webpack_require__(2)(catDogApp);
 
 /***/ },
 /* 1 */
@@ -28424,6 +28419,40 @@
 	})(window, document);
 
 	!window.angular.$$csp() && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = function(app) {	
+		__webpack_require__(3)(app);
+	};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app) {
+		app.controller('catController', ['$scope', '$http', function($scope, $http) {
+			$scope.cats = [];
+			$scope.errors = [];
+
+			$scope.getAll = function() { 
+				$http.get('/cats/')
+					.then(function(res) {
+					$scope.cats = res.data;
+				}, function(res) { 
+					$scope.errors.push({msg: 'could not load cats'});
+					console.log(res.data);
+				});
+			};
+		
+		}]);
+	};
 
 /***/ }
 /******/ ]);

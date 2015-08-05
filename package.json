@@ -1,23 +1,21 @@
 {
-  "name": "gulp",
+  "name": "angularjs",
   "version": "1.0.0",
-  "description": "gulp test",
+  "description": "",
   "main": "server.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "gulp test",
-    "start": "node server.js"
-  },
-  "author": "Meng Chen",
-  "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
+    "angular": "^1.4.3",
     "gulp": "^3.9.0",
     "gulp-webpack": "^1.5.0"
   },
-  "dependencies": {
-    "mongoose": "^4.0.6",
-    "mongodb": "^2.0.35"
-  }
+  "devDependencies": {
+    "angular": "^1.4.3",
+    "gulp": "^3.9.0",
+    "gulp-webpack": "^1.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }

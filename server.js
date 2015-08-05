@@ -1,21 +1,20 @@
- var express = require('express'),
-		app = express(),
-		bodyParser = require('body-parser'),
-		url = require('url'),
-		port = process.env.port || 8080,
-		mongoose = require('mongoose');
+'use strict';
+
+var mongoose = require('mongoose');
+var port = process.env.PORT || 8080;
+var express = require('express');
+var app = express();
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/cat_dog');
 
+var catRoutes = express.Router();
+require('./router/cat_router.js')(catRoutes);
 
-
-//var catRouter = express.Router();
-//require('./router/cat_router.js')(catRouter);
-//
-//app.use('/cats', catRouter);
 
 app.use(express.static(__dirname + '/build'));
+app.use('/cats', catRoutes);
 
 app.listen(port, function(){
-	console.log('server is running');
+	console.log('server is running ' + port);
 });
+
