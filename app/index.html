@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+	<body data-ng-app="catDogApp">
+	<h1>test</h1>
+		<main id="catInfo" data-ng-controller="catController" data-ng-init="getAll()">
+		<h1>Cats:</h1>
+		<ul id="catlist">
+			<li data-ng-repeat="cat in cats">
+				{{cat.name}}
+			</li>
+		</ul>
+		</main>
+		<script src="bundle.js"></script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
