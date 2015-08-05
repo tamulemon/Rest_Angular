@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body data-ng-app="catDogApp">
+<div id="catInfo" data-ng-controller="catController">
+	<h2>{{name}}</h2>
+	<h3>{{cuteness}}</h3>
+	<div id="friends" data-ng-repeat="friend in friends">
+		<ul>
+			<li>{{friend}}</li>
+		</ul>
+	</div>
+	
+</div>
+	
+</body>
+</html>

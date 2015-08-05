@@ -1,0 +1,23 @@
+{
+  "name": "gulp",
+  "version": "1.0.0",
+  "description": "gulp test",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "start": "node server.js"
+  },
+  "author": "Meng Chen",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-webpack": "^1.5.0"
+  },
+  "dependencies": {
+    "mongoose": "^4.0.6",
+    "mongodb": "^2.0.35"
+  }
+}
