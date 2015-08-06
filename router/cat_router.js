@@ -33,9 +33,9 @@ module.exports = function(router) {
 
 
 		// query a cat by name
-	router.route('/:catName')
+	router.route('/:catId')
 		.get(function(req, res) {
-				Cat.find({name: req.params.catName})
+				Cat.findOne({_id: req.params.catId})
 				.populate('enemies')
 					.exec(function(err, cat) {
 					if (err) {
@@ -48,7 +48,8 @@ module.exports = function(router) {
 			})
 		// update a cat by name, will insert if the name doesn't exist
 		.put(function(req, res) {
-			Cat.update({name: req.params.catName}, {$set: req.body}, {upsert:true, multi:true}, function(err) {
+		Cat.update({_id: req.params.catId}, {$set: req.body}, {upsert:true}, function(err) {
+			console.log('update route envoked with request', req.body);
 				if (err) {
 					res.json(errorHandler(err)(500, 'update cat.'));
 				} 
@@ -59,21 +60,20 @@ module.exports = function(router) {
 		})
 		// delete by name
 		.delete(function(req, res) {
-			Cat.remove({name: req.params.catName}, function(err) {
+		Cat.remove({_id: req.params.catId}, function(err) {
 				if (err) {
 					res.json(errorHandler(err)(500, 'delete cat.'));
 				} 
 				else {
-					res.json({msg: 'Cat is successfully updated.'});
+					res.json({msg: 'Cat is successfully deleted.'});
 				}
 			});
 		});
 
 		// add a friend: use $push to push an object to friends array. multiple : true. 
-	router.route('/:catName/addfriend')
-			.put(function(req, res) {
-			Cat.update({name: req.params.catName}, {$push: {friends: req.body}}, {upsert: false, multi:true}, function(err) {
-				// options, need to be grouped in {}
+	router.route('/:catId/addfriend')
+		.put(function(req, res) {
+			Cat.update({_id: req.params.catId}, {$push: {friends: req.body}}, {upsert: false}, function(err) {
 				if (err) {
 					res.json(errorHandler(err)(500, 'add friend to the cat'));
 				} 
@@ -84,17 +84,20 @@ module.exports = function(router) {
 		});
 
 	// fetch a dob by the name and add dog._id to the cat
-	router.route('/:catName/addenemy')
+	router.route('/:catId/addenemy')
 		.put(function(req, res) {
-			fetchDog(req.body.name, updateCat);
+			fetchDog(req.body._id, updateCat);
 
 			var fetchDog = function(dogName, callback){
-				Dog.find({name: dogName}, function(err, data) {
+				Dog.findOne({_id:req.body._id}, function(err, dog) {
 					if (err) {
 						callback(err);
 					}
+					else if(!dog) {
+						callback(null, false);
+					}
 					else {
-						callback(null, data);
+						callback(null, dog);
 					}
 				});
 			};
@@ -103,18 +106,11 @@ module.exports = function(router) {
 				if(err) {
 					res.json(errorHandler(err)(500, 'find the enemy dog.'));
 				} 
+				else if (!dagData) {
+					res.json('Can not find this dog');
+				}
 				else {
-					var dogIDs = [];
-					dogData.forEach(function(adog) {
-						dogIDs.push(adog._id);
-					});
-
-					if(dogIDs.length === 0) {
-						res.json({msg: 'There is not dog with such name'});
-						return;
-					}
-
-					Cat.update({name: req.params.catName}, {$pushAll: {enemies: dogIDs}}, {multi: true}, function(err, catData) {
+					Cat.update({_id: req.params.catId}, {$push: {enemies: dogData._id}}, function(err, catData) {
 						if (err) {
 							res.json(errorHandler(err)(500, 'add enemy to the cat.'));
 						} 

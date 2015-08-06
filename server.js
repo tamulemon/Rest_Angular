@@ -12,7 +12,7 @@ require('./router/cat_router.js')(catRoutes);
 
 
 app.use(express.static(__dirname + '/build'));
-app.use('/cats', catRoutes);
+app.use('/api/cats', catRoutes);
 
 app.listen(port, function(){
 	console.log('server is running ' + port);
