@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>An App for Cat Society</title>
+</head>
+	<body data-ng-app="catDogApp">
+	<h1>Members</h1>
+		<main id="catInfo" data-ng-controller="catController" data-ng-init="getAll()">
+		<h1>Cats:</h1>
+		<ul id="catlist">
+			<li data-ng-repeat="cat in cats">
+				<label>Name: </label>{{cat.name}}
+				<label>Age: </label>{{cat.age}}
+				<label>Cuteness: </label>{{cat.cuteness}} 
+				
+				
+<!--				this will also work, but different behavior. Will only reflect changes when the updates are saved.-->
+<!--
+				form name="updateForm{{cat._id}}" data-ng-if="cat.edit" data-ng-submit="updateCat(cat)">
+				Name: <input type="text" name="updateCatName" data-ng-model="cat.name" ng-model-options="{updateOn:'submit'}" required>
+				Age: <input type="text" name="updateCatAge" data-ng-model="cat.age" ng-model-options="{updateOn:'submit'}" >
+				Cuteness: <input type="number" name="updateCatCuteness" data-ng-model="cat.cuteness" ng-model-options="{updateOn:'submit'}" min="0" max="10" integer>
+				<button data-ng-if="cat.edit" name="cancelUpdate" data-ng-click="cat.edit=false">Cancel</button>
+				<button type="submit" name="saveUpdate">Save</button>
+			</form>
+
+			<button data-ng-if="!cat.edit" name="tryToUpdate" data-ng-click="cat.edit=true">Edit</button>
+			<button name="destroyCat" data-ng-click="destroyCat(cat)">Delete</button>
+-->
+
+
+<!--				This is the behavior tylor asked for-->
+				<form name="updateForm{{cat._id}}" data-ng-if="cat.edit" data-ng-submit="updateCat(cat)">
+					Name: <input type="text" name="updateCatName" data-ng-model="cat.name" required>
+					Age: <input type="text" name="updateCatAge" data-ng-model="cat.age" >
+					Cuteness: <input type="number" name="updateCatCuteness" data-ng-model="cat.cuteness" min="0" max="10" integer>
+					<p data-ng-show="updateForm{{cat._id}}.updateCatCuteness.$error.integer ||updateForm{{cat._id}}.updateCatCuteness.$error.min || updateForm{{cat._id}}.updateCatCuteness.$error.max">Please check the cuteness input</p>
+					<button type="submit" name="saveUpdate">Save</button>
+				</form>
+				
+				<button data-ng-if="cat.edit" name="cancelUpdate" data-ng-click="cancelCat(cat)">Cancel</button>
+				<button data-ng-if="!cat.edit" name="tryToUpdate" data-ng-click="editCat(cat)">Edit</button>
+				<button name="destroyCat" data-ng-click="destroyCat(cat)">Delete</button>
+				
+				<button>Add Friend</button>
+				<button>Add Enemy</button>
+				
+			</li>
+		</ul>
+		<form name="newCatForm" data-ng-submit="createCat(newCat)">
+			Name: <input type="text" name="newCatName" data-ng-model="newCat.name" placeholder="cat name" required>
+			Age: <input type="text" name="newCatAge" data-ng-model="newCat.age" placeholder="cat age" >
+			Cuteness: <input type="number" name="newCatCuteness" data-ng-model="newCat.cuteness" placeholder="cuteness level out of 10" min="0" max="10" integer >
+			<p data-ng-show="newCatForm.newCatCuteness.$error.integer ||newCatForm.newCatCuteness.$error.min || newCatForm.newCatCuteness.$error.max">Please check the cuteness input</p>
+			<button type="submission" data-ng-disabled="newCatForm.$invalid">Create</button>
+		</form>
+		</main>
+		<script src="bundle.js"></script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
