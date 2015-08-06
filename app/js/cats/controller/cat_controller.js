@@ -4,7 +4,7 @@ module.exports = function(app) {
 	app.controller('catController', ['$scope', '$http', function($scope, $http) {
 		$scope.cats = [];
 		$scope.errors = [];
-		var oldCat = null;
+		var oldCat = {};
 		
 		$scope.getAll = function() { 
 			$http.get('api/cats')
@@ -43,7 +43,6 @@ module.exports = function(app) {
 		$scope.updateCat = function(cat) { 
 			$http.put('api/cats/' + cat._id, cat)
 				.then(function(res) {
-				console.log('from the front', cat);
 				$scope.cats.splice($scope.cats.indexOf(cat), 1, cat);
 				cat.edit = false;
 			}, function(res) { 
@@ -53,17 +52,26 @@ module.exports = function(app) {
 			});
 		};
 		
+// the following functions when bound to 'Edit'button and 'Cancel' button will fullfill what Tyler was asking for : cancel the editing when hit cancel button
+		// remember that object is passed by referece, so if just do a cat = oldCat will not do the job.
+		// And, I can not assign a new 'cat' because I will lose the reference to the original 'cat' that is bound to the form
+		// the old way to do it is to copy all properties back
 		
 		$scope.editCat = function(cat) { 
-			oldCat = cat;
+			console.log('before edit', cat);
+			for(var key in cat) {
+				oldCat[key] = cat[key];
+			}
 			cat.edit= true;
-			console.log('try edit', cat);
+			console.log('oldCat', oldCat);
 		};
 		
 		$scope.cancelCat = function(cat) { 
-			console.log('scope oldcat', oldCat);
-			cat = oldCat;
-			cat.edit = false;
+//			$scope.updateForm[cat._id].$rollbackViewValue();
+			for(var key in cat) {
+				cat[key] = oldCat[key];
+			}
+			console.log('cat after cancel', cat);
 		};
 		
 	}]);
