@@ -58,20 +58,20 @@ module.exports = function(app) {
 		// the old way to do it is to copy all properties back
 		
 		$scope.editCat = function(cat) { 
-			console.log('before edit', cat);
+//			console.log('before edit', cat);
 			for(var key in cat) {
 				oldCat[key] = cat[key];
 			}
+//			console.log('old cat', oldCat);
 			cat.edit= true;
-			console.log('oldCat', oldCat);
 		};
 		
 		$scope.cancelCat = function(cat) { 
 //			$scope.updateForm[cat._id].$rollbackViewValue();
-			for(var key in cat) {
+			for(var key in cat) { // cat has key 'edit', but oldCat doesn't have this property. If use for(var key in oldCat), the edit will still be true. 
 				cat[key] = oldCat[key];
 			}
-			console.log('cat after cancel', cat);
+//			console.log('cat after cancel', cat);
 		};
 		
 	}]);

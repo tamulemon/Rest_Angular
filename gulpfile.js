@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var webpack = require('gulp-webpack');
+var Server = require('karma').Server;
 
 gulp.task('webpack:dev', function() {
 	return gulp.src('app/js/client.js')
@@ -16,6 +17,19 @@ gulp.task('copy', function() {
 		.pipe(gulp.dest('build/'));
 });
 
+gulp.task('webpack:test', function() {
+	return gulp.src('test/karma_tests/entry.js')
+		.pipe(webpack({
+		output: {
+			filename: 'test_bundle.js'
+		}
+	}))
+		.pipe(gulp.dest('test/karma_tests/'));
+});
+
+gulp.task('karmatest', ['webpack:test'], function(done) {
+	new Server({configFile: __dirname + '/karma.conf.js'}, done).start();
+});
 
 gulp.task('build', ['webpack:dev','copy'] );
-gulp.task('default', ['build']);
+gulp.task('default', ['karmatest', 'build']);

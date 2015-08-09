@@ -1,0 +1,1 @@
+require(__dirname + '/cat_controller_test.js');
