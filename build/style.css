@@ -18,19 +18,30 @@ a{
 }
 
 h1{
+	margin:10px;
+	margin-left: 40%;
+	padding: 50px;
+	width: 200px;
+	position: relative;
 	text-align:center;
-	margin: 20px;
-	padding: 20px;
-	background: #FFFFCC;
-	border: ridge;
-	border-width: 5px;
-	border-color: #669999;
+	background-color: rgba(255, 255, 204, 0.6);
 	font-size: 36px;
 	font-family: fantasy;
 	color: #1F3D5C;
 }
 
+#h1Box {
+	border: ridge;
+	border-width: 8px;
+	border-color: blanchedalmond;
+	background-image: url('./img/cat2.jpeg');
+	background-repeat: repeat-x;
+}
+
 h2 {
+	margin: 20px;
+	background: rgba(255, 255, 204, 0.3);
+	background-size: contain;
 	text-align: center;
 	font-size: 32px;
 }
@@ -53,3 +64,5 @@ button:hover {
 	background: #99CCFF;
 	color: #fff;
 }
+
+#catList

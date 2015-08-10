@@ -74,6 +74,13 @@
 			expect($scope.oldCat).toBeUndefined(); // oldCat variable is not attached to scope so undefined
 			});
 			
+		
+	//	beforeAll(inject(function(_$httpBackend_, _$rootScope_) {
+	//		$httpBackend = _$httpBackend_;
+	//		$scope = _$rootScope_.$new();
+	//		var catController = $controller('catController', { $scope: $scope }); // the last catController is consumed by the previous it evaluation(?)
+	//	}))
+		
 		describe('REST operations', function() {
 			beforeEach(inject(function(_$httpBackend_, _$rootScope_) {
 				$httpBackend = _$httpBackend_;
@@ -143,6 +150,7 @@
 				$scope.editCat(catToUpdate);
 				$scope.cancelCat(catToUpdate);
 				expect(catToUpdate.edit).toBeUndefined();
+				// can not test the oldCat in catController, because it is private to that scope (not attached to the scope)
 			});
 			
 		});
@@ -28617,7 +28625,7 @@
 			
 			$scope.cancelCat = function(cat) { 
 	//			$scope.updateForm[cat._id].$rollbackViewValue();
-				for(var key in cat) {
+				for(var key in cat) { // cat has key 'edit', but oldCat doesn't have this property. If use for(var key in oldCat), the edit will still be true. 
 					cat[key] = oldCat[key];
 				}
 	//			console.log('cat after cancel', cat);
