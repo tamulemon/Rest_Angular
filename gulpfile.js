@@ -12,8 +12,13 @@ gulp.task('webpack:dev', function() {
 		.pipe(gulp.dest('build/'));
 });
 
-gulp.task('copy', function() {
+gulp.task('copyhtml', function() {
 	return gulp.src('app/**/*.html')
+		.pipe(gulp.dest('build/'));
+});
+
+gulp.task('copycss', function() {
+	return gulp.src('app/**/*.css')
 		.pipe(gulp.dest('build/'));
 });
 
@@ -31,5 +36,5 @@ gulp.task('karmatest', ['webpack:test'], function(done) {
 	new Server({configFile: __dirname + '/karma.conf.js'}, done).start();
 });
 
-gulp.task('build', ['webpack:dev','copy'] );
+gulp.task('build', ['webpack:dev','copyhtml', 'copycss'] );
 gulp.task('default', ['karmatest', 'build']);
