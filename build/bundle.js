@@ -47,9 +47,10 @@
 	'use strict';
 	__webpack_require__(1); 
 
-	var catDogApp = angular.module('catDogApp', []);
+	var catDogApp = angular.module('catDogApp', ['catService']);
 
 	__webpack_require__(2)(catDogApp);
+	__webpack_require__(4);
 
 /***/ },
 /* 1 */
@@ -28437,10 +28438,13 @@
 	'use strict';
 
 	module.exports = function(app) {
-		app.controller('catController', ['$scope', '$http', function($scope, $http) {
+		app.controller('catController', ['$scope', '$http', 'relationshipService', function($scope, $http, relService) {
 			$scope.cats = [];
 			$scope.errors = [];
 			var oldCat = {};
+			
+			var Relationship = new relService('cats');
+			
 			
 			$scope.getAll = function() { 
 				$http.get('api/cats')
@@ -28450,6 +28454,15 @@
 					$scope.errors.push({msg: 'could not load cats'});
 					console.log(res.data);
 				});
+			};
+			
+			$scope.showDetail= function(cat) {
+				if(!cat.showDetail) {
+					cat.showDetail = true;
+				}
+				else {
+					cat.showDetail = false;
+				}
 			};
 			
 			$scope.createCat = function(newCat) { 
@@ -28510,7 +28523,87 @@
 	//			console.log('cat after cancel', cat);
 			};
 			
+			$scope.showFriend = function(cat) {
+				Relationship.showAvailable(cat, 'friend');
+			};
+			
+			$scope.addFriend = function(cat, friend) {
+	//			console.log('addFriend funtion envoked');
+				Relationship.addRelationship(cat, 'friends', 'Cat', friend, function(err, data) {
+					if(err) {
+						$scope.errors.push(err);
+					}else {
+						console.log('data back to controller');
+						cat.friends.push(friend);
+						$scope.cats.splice($scope.cats.indexOf(cat), 1, cat);
+					}
+				});
+			};
+			
 		}]);
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var catServices = angular.module('catService', []);
+
+	__webpack_require__(5)(catServices);
+
+	module.exports = catServices;
+
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+		app.factory('relationshipService', ['$http', function($http) {
+			
+			function errorHandler(callback) {
+				return function(res) {
+					console.log(res.data);
+					callback(res.data);
+				};
+			}
+			
+			function successHandler(callback) {
+				return function(res) {
+					callback(null, res.data);
+				};
+			}
+			
+			return function(resourceName) {
+				return {
+						showAvailable : function(data, relationship) {
+							if(!data[relationship]) {
+								data[relationship] = true;
+								console.log(data.friend);
+							}else {
+								data[relationship] = false;
+							}
+						},
+					
+						addRelationship: function(data1, relationship, Model, data2, callback) {
+							console.log('relationship service envoked');
+							$http({
+								method: 'PUT',
+								data: [data1, data2],
+								url: 'api/' + resourceName + '/' + data1._id + '/' + relationship + '?type=' + Model + '&id=' + data2._id
+							}).then(successHandler(callback), errorHandler(callback));
+						}
+					};
+			};
+				
+	//			router.route('/:catId/:relationship')
+	//				//		?type=type&id=id'
+	//				updateRel(Cat, req.params.catId, rq.params.relationship, type, Id, function(err, data) {
+
+			
+		}]);
+
 	};
 
 /***/ }

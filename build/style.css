@@ -5,6 +5,8 @@
 
 body{
 	font-family:fantasy, sans-serif;
+/*	text-align: center;*/
+	padding-left: 50px;
 	font-size: 20px;
 	color: #336699;
 	background: #A3CCCC;
@@ -13,7 +15,7 @@ body{
 }
 
 a{
-	color:#3366FF;
+	color:#000;
 	text-decoration:none;
 }
 
@@ -39,11 +41,16 @@ h1{
 }
 
 h2 {
+	text-align: center;
 	margin: 20px;
 	background: rgba(255, 255, 204, 0.3);
 	background-size: contain;
 	text-align: center;
 	font-size: 32px;
+}
+
+.friendList {
+	color: antiquewhite;
 }
 
 button {  

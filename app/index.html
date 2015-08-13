@@ -14,11 +14,37 @@
 		<h2>Cats:</h2>
 		<ul id="catlist">
 			<li data-ng-repeat="cat in cats">
-				<label>Name: </label>{{cat.name}}
-				<label>Age: </label>{{cat.age}}
-				<label>Cuteness: </label>{{cat.cuteness}} 
-				
-				
+				<label>Name: </label><a data-ng-click="showDetail(cat)" >{{cat.name}}</a>
+				<div data-ng-show="cat.showDetail" class="detail">
+					<label>Age: </label>{{cat.age}}<br>
+					<label>Cuteness: </label>{{cat.cuteness}}<br>
+					<label>Friends: </label> 
+					<ul class="friendList">
+						<li data-ng-repeat="friend in cat.friends">
+							<p>{{friend.name}}</p>
+						</li>
+					</ul>
+					<label>Enemies: </label><br>
+					<form name="updateForm{{cat._id}}" data-ng-if="cat.edit" data-ng-submit="updateCat(cat)">
+						Name: <input type="text" name="updateCatName" data-ng-model="cat.name" required>
+						Age: <input type="text" name="updateCatAge" data-ng-model="cat.age" >
+						Cuteness: <input type="number" name="updateCatCuteness" data-ng-model="cat.cuteness" min="0" max="10" integer>
+						<p data-ng-show="updateForm{{cat._id}}.updateCatCuteness.$error.integer ||updateForm{{cat._id}}.updateCatCuteness.$error.min || updateForm{{cat._id}}.updateCatCuteness.$error.max">Please check the cuteness input</p>
+						<button type="submit" name="saveUpdate">Save</button>
+					</form>
+
+					<button data-ng-if="cat.edit" name="cancelUpdate" data-ng-click="cancelCat(cat)">Cancel</button>
+					<button data-ng-if="!cat.edit" name="tryToUpdate" data-ng-click="editCat(cat)">Edit</button>
+					<button name="destroyCat" data-ng-click="destroyCat(cat)">Delete</button>
+
+					<button data-ng-click="showFriend(cat)">Friend</button>
+					<div data-ng-if="cat.friend">
+						<label>Available Friends</label>
+							<select ng-model="friend" ng-options="cat.name for cat in cats"></select> 
+						<button data-ng-click="addFriend(cat, friend)">Add</button>
+						</div>
+					<hr/>
+				</div>			
 <!--				this will also work, but different behavior. Will only reflect changes when the updates are saved.-->
 <!--
 				form name="updateForm{{cat._id}}" data-ng-if="cat.edit" data-ng-submit="updateCat(cat)">
@@ -35,23 +61,10 @@
 
 
 <!--				This is the behavior tylor asked for-->
-				<form name="updateForm{{cat._id}}" data-ng-if="cat.edit" data-ng-submit="updateCat(cat)">
-					Name: <input type="text" name="updateCatName" data-ng-model="cat.name" required>
-					Age: <input type="text" name="updateCatAge" data-ng-model="cat.age" >
-					Cuteness: <input type="number" name="updateCatCuteness" data-ng-model="cat.cuteness" min="0" max="10" integer>
-					<p data-ng-show="updateForm{{cat._id}}.updateCatCuteness.$error.integer ||updateForm{{cat._id}}.updateCatCuteness.$error.min || updateForm{{cat._id}}.updateCatCuteness.$error.max">Please check the cuteness input</p>
-					<button type="submit" name="saveUpdate">Save</button>
-				</form>
-				
-				<button data-ng-if="cat.edit" name="cancelUpdate" data-ng-click="cancelCat(cat)">Cancel</button>
-				<button data-ng-if="!cat.edit" name="tryToUpdate" data-ng-click="editCat(cat)">Edit</button>
-				<button name="destroyCat" data-ng-click="destroyCat(cat)">Delete</button>
-				
-				<button>Add Friend</button>
-				<button>Add Enemy</button>
-				
+	
 			</li>
 		</ul>
+		<hr/>
 		<form name="newCatForm" data-ng-submit="createCat(newCat)">
 			Name: <input type="text" name="newCatName" data-ng-model="newCat.name" placeholder="cat name" required>
 			Age: <input type="text" name="newCatAge" data-ng-model="newCat.age" placeholder="cat age" >

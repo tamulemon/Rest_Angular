@@ -1,10 +1,13 @@
 'use strict';
 
 module.exports = function(app) {
-	app.controller('catController', ['$scope', '$http', function($scope, $http) {
+	app.controller('catController', ['$scope', '$http', 'relationshipService', function($scope, $http, relService) {
 		$scope.cats = [];
 		$scope.errors = [];
 		var oldCat = {};
+		
+		var Relationship = new relService('cats');
+		
 		
 		$scope.getAll = function() { 
 			$http.get('api/cats')
@@ -14,6 +17,15 @@ module.exports = function(app) {
 				$scope.errors.push({msg: 'could not load cats'});
 				console.log(res.data);
 			});
+		};
+		
+		$scope.showDetail= function(cat) {
+			if(!cat.showDetail) {
+				cat.showDetail = true;
+			}
+			else {
+				cat.showDetail = false;
+			}
 		};
 		
 		$scope.createCat = function(newCat) { 
@@ -72,6 +84,23 @@ module.exports = function(app) {
 				cat[key] = oldCat[key];
 			}
 //			console.log('cat after cancel', cat);
+		};
+		
+		$scope.showFriend = function(cat) {
+			Relationship.showAvailable(cat, 'friend');
+		};
+		
+		$scope.addFriend = function(cat, friend) {
+//			console.log('addFriend funtion envoked');
+			Relationship.addRelationship(cat, 'friends', 'Cat', friend, function(err, data) {
+				if(err) {
+					$scope.errors.push(err);
+				}else {
+					console.log('data back to controller');
+					cat.friends.push(friend);
+					$scope.cats.splice($scope.cats.indexOf(cat), 1, cat);
+				}
+			});
 		};
 		
 	}]);

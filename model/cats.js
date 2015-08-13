@@ -6,10 +6,14 @@ var catSchema = new Schema ({ //camel case for schema
 	age : Number,
 	cuteness : Number, 
 	birthday : Date,
-	friends : [],
+	friends : [{
+		Id: {type: Schema.Types.ObjectId, ref: 'Cat'},
+		name: String
+	}],
 	enemies : [{
-		type: Schema.Types.ObjectId, 
-		ref: 'Dog'}]
+		Id: {type: Schema.Types.ObjectId, ref: 'Dog'},
+		name: String
+	}]
 });
 
 module.exports = mongoose.model('Cat', catSchema); //capital letter for model
