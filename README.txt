@@ -5,20 +5,23 @@ This is a revisit of the REST API, adding angular front end to it
 - cat routes will start as localhost:8080/cat
 - dog routes : localhost:8080/dog
 
-each has the following routes. User cat as example:
+each has the following routes. here I use cat_router as an example:
 
-- /all get: view all cats 
+— Implemented in AngularJS
 
-- /all post: add a new cat document
+- api/cats get: view all cats 
 
-- /:catName get: to view a specific cat by the name
+- api/cats post: add a new cat 
 
-- /:catName put: to update a cat by name. User $set method so not overwriting existing infor. upsert set to true and multi is set to true
+- api/cats/:catId put: to update a cat by id. User $set method so not overwriting existing infor. upsert set to true 
 
-- /:catName delete: to delete a cat by name
+- api/cats/:catId delete: to delete a cat by id
+///////////////////////////////////////////////////////////////////
 
--/addfriend/:catName put: add a cat friend. pass a new cat object in the request body. use $push to push a cat object to friends array as embeded document. multi set to true. 
+— Not implemented in AngularJS
 
--/addenemy/:catName put: pass a dog's name in the request.body. add an enemy from dogs collection.  multi set to true. Save the objectID to the enemies array as embeded document
+- api/cats/:catId/addfriend put: add a cat friend. pass a new cat object in the request body. use $push to push a cat object to friends array as embeded document. 
+
+- api/cats/:catId/addenemy put: pass a dog's id in the request.body. add an enemy from dogs collection. Save the objectID to the enemies array as embeded document
 
 Dog routes is not implemented with friend/enemy yet.
